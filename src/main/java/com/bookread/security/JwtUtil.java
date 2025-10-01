@@ -1,24 +1,52 @@
 package com.bookread.security;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = "your_secret_key_here"; // Use env variable in production
 
-    public String generateToken(String username, String userLevel) {
+    //put it in env later
+    private final String SECRET_KEY = "GQyq7WJL7oErg+Jv9Ih+vZQ1C1G7I4W2j1vQm9XLK5Q=";
+
+    public String generateToken(String email, String userLevel) {
+        SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
         return Jwts.builder()
-                .setSubject(username)
+                .subject(email)
                 .claim("userLevel", userLevel)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day expiry
+                .signWith(key)
                 .compact();
     }
 
-    // Add validation methods here (parse claims, check expiration, etc.)
+    public Claims extractClaims(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public String extractEmail(String token) {
+        return extractClaims(token).getSubject();
+    }
+
+    public String extractUserLevel(String token) {
+        return (String) extractClaims(token).get("userLevel");
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
+    }
 }
