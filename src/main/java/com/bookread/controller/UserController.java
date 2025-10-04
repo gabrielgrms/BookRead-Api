@@ -22,7 +22,6 @@ public class UserController {
 
     @PostMapping("/register")
     public UserDTO createUser(@RequestBody UserCreateDTO userDto) {
-        // Ignores client-sent userLevel: always sets 'U'
         return userService.createUser(userDto.getName(), userDto.getEmail(), userDto.getPassword());
     }
 
