@@ -20,8 +20,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/users").permitAll() // Allow login and registration
+                        .requestMatchers("/auth/login", "/users/register").permitAll() // Allow login and registration
                         .requestMatchers("/users/all").hasAuthority("S")      // Restrict GET all users to 'S' only
+                        .requestMatchers("/books/create").hasAuthority("S")      // Restrict GET all users to 'S' only
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
