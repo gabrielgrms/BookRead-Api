@@ -21,7 +21,7 @@ public class UserBook {
 
     private int currentPage;
 
-    private boolean isFavorite;
+    private Boolean isFavorite;
 
     public Integer getId() {
         return id;
@@ -63,11 +63,11 @@ public class UserBook {
         this.currentPage = currentPage;
     }
 
-    public boolean isFavorite() {
+    public Boolean isFavorite() {
         return isFavorite;
     }
 
-    public void setFavorite(boolean favorite) {
+    public void setFavorite(Boolean favorite) {
         isFavorite = favorite;
     }
 
