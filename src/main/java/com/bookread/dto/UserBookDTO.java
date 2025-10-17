@@ -1,9 +1,10 @@
 package com.bookread.dto;
 
 import com.bookread.model.UserBook;
+import com.bookread.model.UserBookId;
 
 public record UserBookDTO(
-        Integer id,
+        UserBookId id,
         Integer bookId,
         String bookTitle,
         UserBook.Status status,

@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 public class UserBook {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @EmbeddedId
+    private UserBookId id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -23,11 +22,11 @@ public class UserBook {
 
     private Boolean isFavorite;
 
-    public Integer getId() {
+    public UserBookId getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UserBookId id) {
         this.id = id;
     }
 

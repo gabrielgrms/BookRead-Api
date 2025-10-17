@@ -5,6 +5,7 @@ import com.bookread.mapper.UserBookMapper;
 import com.bookread.model.Book;
 import com.bookread.model.User;
 import com.bookread.model.UserBook;
+import com.bookread.model.UserBookId;
 import com.bookread.repository.BookRepository;
 import com.bookread.repository.UserBookRepository;
 import com.bookread.repository.UserRepository;
@@ -32,7 +33,10 @@ public class UserBookService {
         Book book = bookRepo.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
 
+        UserBookId userBookId = new UserBookId(user.getId(), bookId);
+
         UserBook userBook = new UserBook();
+        userBook.setId(userBookId);
         userBook.setUser(user); // sets the user object, which includes userId
         userBook.setBook(book);
         userBook.setStatus(status);
