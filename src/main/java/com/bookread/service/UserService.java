@@ -22,7 +22,11 @@ public class UserService {
     }
 
     public UserDTO createUser(String name, String email, String password) {
-        User user = new User();
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            throw new RuntimeException("User already exists!");
+        }
+        user = new User();
         user.setName(name);
         user.setEmail(email);
         user.setPassword(PasswordUtils.hashPassword(password));

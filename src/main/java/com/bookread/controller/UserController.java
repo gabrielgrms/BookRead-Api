@@ -1,10 +1,13 @@
 package com.bookread.controller;
 
+import com.bookread.dto.ApiError;
 import com.bookread.model.User;
 import com.bookread.service.UserService;
 import com.bookread.dto.UserCreateDTO;
 import com.bookread.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +24,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public UserDTO createUser(@RequestBody UserCreateDTO userDto) {
-        return userService.createUser(userDto.getName(), userDto.getEmail(), userDto.getPassword());
+    public ResponseEntity<?> createUser(@RequestBody UserCreateDTO userDto) {
+        try {
+            UserDTO dto = userService.createUser(
+                    userDto.getName(),
+                    userDto.getEmail(),
+                    userDto.getPassword()
+            );
+            return  ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError("Bad Request", ex.getMessage()));
+        }
     }
 
     @GetMapping("/all")

@@ -7,6 +7,8 @@ import com.bookread.dto.UserBookDTO;
 import com.bookread.service.BookService;
 import com.bookread.service.UserBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +26,20 @@ public class UserBookController {
     }
 
     @PostMapping("/create")
-    public UserBookDTO createUserBook(@RequestBody UserBookCreateDTO userBook, Authentication authentication) {
+    public ResponseEntity<?> createUserBook(@RequestBody UserBookCreateDTO userBook, Authentication authentication) {
         String userEmail = (String) authentication.getPrincipal();
-        return userBookService.createUserBook(userEmail,userBook.bookId(), userBook.isFavorite(), userBook.currentPage(), userBook.status());
+        try {
+
+            UserBookDTO dto = userBookService.createUserBook(
+                    userEmail,userBook.bookId(),
+                    userBook.isFavorite(),
+                    userBook.currentPage(),
+                    userBook.status()
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        } catch(RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
 
