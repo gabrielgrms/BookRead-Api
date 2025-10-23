@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name="users")
+@Table(name="users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User
 {
     @Id
@@ -13,6 +13,8 @@ public class User
     private Integer id;
     private Character userLevel;
     private String name;
+
+    @Column(unique = true, nullable = false)
     private String email;
     private String password;
 
