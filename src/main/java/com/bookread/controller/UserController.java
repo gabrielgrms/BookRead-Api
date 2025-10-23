@@ -1,7 +1,6 @@
 package com.bookread.controller;
 
-import com.bookread.dto.ApiError;
-import com.bookread.model.User;
+import com.bookread.dto.ApiResponse;
 import com.bookread.service.UserService;
 import com.bookread.dto.UserCreateDTO;
 import com.bookread.dto.UserDTO;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -24,21 +21,21 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody UserCreateDTO userDto) {
+    public ResponseEntity<?> createUser(@RequestBody UserCreateDTO user) {
         try {
-            UserDTO dto = userService.createUser(
-                    userDto.getName(),
-                    userDto.getEmail(),
-                    userDto.getPassword()
+            UserDTO userDto = userService.createUser(
+                    user.name(),
+                    user.email(),
+                    user.password()
             );
-            return  ResponseEntity.status(HttpStatus.CREATED).body(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
         } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError("Bad Request", ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(ex.getMessage()));
         }
     }
 
     @GetMapping("/all")
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public ResponseEntity<?> getUsers() {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.getUsers());
     }
 }

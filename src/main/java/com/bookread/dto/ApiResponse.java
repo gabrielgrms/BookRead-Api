@@ -1,4 +1,4 @@
 package com.bookread.dto;
 
-public record ApiError(String error, String message) {
+public record ApiResponse(String message) {
 }

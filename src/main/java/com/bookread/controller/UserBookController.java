@@ -1,9 +1,6 @@
 package com.bookread.controller;
 
-import com.bookread.dto.BookCreateDTO;
-import com.bookread.dto.BookDTO;
-import com.bookread.dto.UserBookCreateDTO;
-import com.bookread.dto.UserBookDTO;
+import com.bookread.dto.*;
 import com.bookread.service.BookService;
 import com.bookread.service.UserBookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,7 @@ public class UserBookController {
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(dto);
         } catch(RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(ex.getMessage()));
         }
     }
 
