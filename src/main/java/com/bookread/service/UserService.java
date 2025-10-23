@@ -47,4 +47,16 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
+    public void changePassword(User user, String newPassword) {
+        if(PasswordUtils.matches(newPassword, user.getPassword())){
+            throw new RuntimeException("A nova senha é igual a anterior. Por favor digite uma nova senha");
+        }
+        user.setPassword(PasswordUtils.hashPassword(newPassword));
+        userRepository.save(user);
+    }
 }
