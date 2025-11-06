@@ -183,7 +183,7 @@ Replace `$memory` with `$this->memory->getAllData()` and fix the class name in t
 
 ### Other Potential Issues
 
-1. **GCPProvider2 has similar bug**: 
+1. **GCPProvider2 has similar bug in its overridden generateReport()**: 
    ```php
    $reportData = [];  // Should be empty string, not array
    $reportData .= sprintf(...);  // This will fail on first concatenation
@@ -198,8 +198,15 @@ Replace `$memory` with `$this->memory->getAllData()` and fix the class name in t
    $this->releaseLock($handle);  // Positional parameter
    ```
 
-3. **Async execution limitations**:
-   - Each async operation creates a new DataManager instance
+3. **GCPProvider2 has similar bug in its overridden generateReport()**: 
+   ```php
+   $reportData = [];  // Should be empty string, not array
+   $reportData .= sprintf(...);  // This will fail on first concatenation
+   ```
+   Note: The BaseProvider also has a correct generateReport() implementation, but GCPProvider2 
+   overrides it with a buggy version.
+
+4. **Async execution limitations**:
    - New instances have empty memory (no shared state)
    - Async operations won't see data from synchronous operations
    - This is a fundamental architectural issue with the current approach

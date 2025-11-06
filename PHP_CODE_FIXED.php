@@ -49,7 +49,8 @@ class DataManager {
         
         // Execute in background using exec (PHP's way to simulate async without pcntl)
         // FIX: Changed ConcurrentOperationManager to DataManager
-        // NOTE: This approach is fragile. For production, use proper message queues (RabbitMQ, Redis Queue)
+        // ⚠️ WARNING: This approach is for DEMONSTRATION ONLY. Do NOT use in production!
+        // For production, use proper message queues (RabbitMQ, Redis Queue) or job processing systems.
         $cmd = sprintf(
             'php -r "
             include_once \'%s\';
