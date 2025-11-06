@@ -217,6 +217,6 @@ Process A                    Lock File              Process B
 
 The undefined `$memory` variable causes:
 - PHP Notice/Warning (may stop execution depending on error_reporting)
-- Duplicate check always fails (returns false for undefined variable)
+- Duplicate check never works (`isset()` on undefined variable always returns false, so duplicates are never detected)
 - In strict mode, causes fatal error before reaching `registerData()`
-- Code may appear to work but with broken validation
+- Code may appear to work but with broken validation, allowing duplicate IDs
